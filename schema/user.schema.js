@@ -26,6 +26,10 @@ const userSchema = new Schema(
       minLength: 3,
       required: [true, "Password must be"],
     },
+    image: {
+      type: String,
+      default: "",
+    },
   },
   {
     versionKey: false,

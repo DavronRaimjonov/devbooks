@@ -1,3 +1,4 @@
+import cloudinary from "../config/cloudinary.js";
 import { CustomError } from "../errors/index.js";
 import userSchemas from "../schema/user.schema.js";
 import { hashPassword, signInJwt } from "../utils/jwt.js";
@@ -31,6 +32,24 @@ export const signIn = async (req, res, next) => {
     const token = signInJwt({ id: user._id });
     const resData = new ResData(200, "succses", { user, token });
     res.status(resData.status).json(resData);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const uploadImage = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      throw new CustomError(400, "Image must be");
+    }
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "uploads",
+    });
+    await userSchemas.updateOne(
+      { _id: req.userId },
+      { $set: { image: result.secure_url } }
+    );
+    res.status(201).json({ message: "succses" });
   } catch (error) {
     next(error);
   }
