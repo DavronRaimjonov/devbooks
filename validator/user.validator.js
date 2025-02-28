@@ -6,6 +6,8 @@ const userValidatorSchema = Joi.object({
   email: Joi.string().email().required(),
   phone_number: Joi.number().integer().min(12).required(),
   password: Joi.string().min(3).max(10).required(),
+  wishlist_books: Joi.array(),
+  wishlist_authors: Joi.array(),
 });
 
 const loginValidatorSchema = Joi.object({

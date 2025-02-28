@@ -1,5 +1,8 @@
 import { Router } from "express";
 import {
+  add_wishlist,
+  delete_wishlist,
+  get_wishlist,
   signIn,
   signUp,
   uploadImage,
@@ -20,4 +23,7 @@ router.post(
   upload.single("image"),
   uploadImage
 );
+router.get("/wishlist/:like", verifyMiddlewere, get_wishlist);
+router.post("/delete-wishlist", verifyMiddlewere, delete_wishlist);
+router.post("/add-wishlist", verifyMiddlewere, add_wishlist);
 export { router };

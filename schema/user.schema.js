@@ -30,6 +30,16 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+    wishlist_books: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+    wishlist_authors: {
+      type: Array,
+      required: true,
+      default: [],
+    },
   },
   {
     versionKey: false,
