@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   add_wishlist,
+  changePassword,
   delete_wishlist,
   get_wishlist,
   signIn,
@@ -9,6 +10,7 @@ import {
   veryifyRegister,
 } from "../../controller/auth.controller.js";
 import {
+  changePasswordMiddleware,
   sendRgisterVerify,
   validateUserSignin,
   validateUserSignup,
@@ -29,4 +31,10 @@ router.get("/wishlist/:like", verifyMiddlewere, get_wishlist);
 router.post("/delete-wishlist", verifyMiddlewere, delete_wishlist);
 router.post("/add-wishlist", verifyMiddlewere, add_wishlist);
 router.post("/send-verify-register", sendRgisterVerify, veryifyRegister);
+router.post(
+  "/change-password",
+  verifyMiddlewere,
+  changePasswordMiddleware,
+  changePassword
+);
 export { router };

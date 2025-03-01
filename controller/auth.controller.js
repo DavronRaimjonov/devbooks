@@ -70,6 +70,29 @@ export const signIn = async (req, res, next) => {
   }
 };
 
+export const changePassword = async (req, res, next) => {
+  try {
+    const { current_password, new_password } = req.body;
+    const user = await userSchemas.findOne({ _id: req.userId });
+    const isMatchPassword = await bcrypt.compare(
+      current_password,
+      user.password
+    );
+
+    if (!isMatchPassword) {
+      throw new CustomError(400, "Current password wrong");
+    }
+    const new_password2 = await hashPassword(new_password);
+    await userSchemas.updateOne(
+      { _id: req.userId },
+      { $set: { password: new_password2 } }
+    );
+    res.status(203).json({ message: "succses" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const uploadImage = async (req, res, next) => {
   try {
     if (!req.file) {

@@ -2,6 +2,7 @@ import {
   userValidatorSchema,
   loginValidatorSchema,
   veryifyRegisterSchema,
+  changePasswordSchema,
 } from "../validator/user.validator.js";
 import { CustomError } from "../errors/index.js";
 import { addBookValidatorSchema } from "../validator/book.validator.js";
@@ -62,10 +63,22 @@ const sendRgisterVerify = (req, res, next) => {
     next(error);
   }
 };
+const changePasswordMiddleware = (req, res, next) => {
+  try {
+    const { error } = changePasswordSchema.validate(req.body);
+    if (error) {
+      throw new CustomError(400, error.details[0].message);
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 export {
   validateUserSignup,
   validateUserSignin,
   validateAddBooks,
   validateAddAuthor,
   sendRgisterVerify,
+  changePasswordMiddleware,
 };
