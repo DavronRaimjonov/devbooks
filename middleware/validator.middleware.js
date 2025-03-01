@@ -1,6 +1,7 @@
 import {
   userValidatorSchema,
   loginValidatorSchema,
+  veryifyRegisterSchema,
 } from "../validator/user.validator.js";
 import { CustomError } from "../errors/index.js";
 import { addBookValidatorSchema } from "../validator/book.validator.js";
@@ -50,9 +51,21 @@ const validateAddAuthor = (req, res, next) => {
     next(error);
   }
 };
+const sendRgisterVerify = (req, res, next) => {
+  try {
+    const { error } = veryifyRegisterSchema.validate(req.body);
+    if (error) {
+      throw new CustomError(400, error.details[0].message);
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 export {
   validateUserSignup,
   validateUserSignin,
   validateAddBooks,
   validateAddAuthor,
+  sendRgisterVerify,
 };

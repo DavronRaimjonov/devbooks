@@ -40,6 +40,18 @@ const userSchema = new Schema(
       required: true,
       default: [],
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verifyCode: {
+      type: String,
+      default: null,
+    },
+    verifyExpires: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     versionKey: false,

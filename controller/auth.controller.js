@@ -1,4 +1,5 @@
 import cloudinary from "../config/cloudinary.js";
+import { sendSmsVerify } from "../config/mailer.js";
 import { CustomError } from "../errors/index.js";
 import authorSchemas from "../schema/author.schema.js";
 import bookSchmeas from "../schema/book.schema.js";
@@ -10,10 +11,40 @@ import bcrypt from "bcrypt";
 export const signUp = async (req, res, next) => {
   try {
     const body = req.body;
+    const email = await userSchemas.findOne({ email: body.email });
+    if (email) {
+      throw new CustomError(400, "Email already exsist");
+    }
+
     const password = await hashPassword(body.password);
-    const data = await userSchemas.create({ ...body, password });
-    const token = signInJwt({ id: data._id });
-    const resData = new ResData(201, "succses", { user: data, token });
+    let data = await userSchemas.create({ ...body, password });
+
+    await sendSmsVerify({ to: data.email });
+    const resData = new ResData(
+      200,
+      "Verification code sent. Please verify your email."
+    );
+    res.status(resData.status).json(resData);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const veryifyRegister = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await userSchemas.findOne({ email });
+    if (!user || user.verifyCode !== password)
+      throw new CustomError(400, "Invalid verification code");
+    if (Date.now() > user.verifyExpires)
+      throw new CustomError(400, "Verification code expired");
+
+    let data = await userSchemas.findOneAndUpdate(
+      { email },
+      { $set: { verify: true, verifyCode: null, verifyExpires: 0 } },
+      { new: true }
+    );
+    const resData = new ResData(201, "Email verified successfully", data);
     res.status(resData.status).json(resData);
   } catch (error) {
     next(error);

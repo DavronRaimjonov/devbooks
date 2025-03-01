@@ -36,6 +36,20 @@ const bookSchmea = new Schema(
       enum: Object.values(LiteraturePeriod),
       required: true,
     },
+    rate: {
+      type: Number,
+      max: 5,
+      required: true,
+      default: 0,
+    },
+    ganre: {
+      type: String,
+      required: true,
+    },
+    publisher: {
+      type: String,
+      required: true,
+    },
     image: {
       type: String,
       required: true,

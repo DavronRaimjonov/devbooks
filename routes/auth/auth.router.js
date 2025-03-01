@@ -6,8 +6,10 @@ import {
   signIn,
   signUp,
   uploadImage,
+  veryifyRegister,
 } from "../../controller/auth.controller.js";
 import {
+  sendRgisterVerify,
   validateUserSignin,
   validateUserSignup,
 } from "../../middleware/validator.middleware.js";
@@ -26,4 +28,5 @@ router.post(
 router.get("/wishlist/:like", verifyMiddlewere, get_wishlist);
 router.post("/delete-wishlist", verifyMiddlewere, delete_wishlist);
 router.post("/add-wishlist", verifyMiddlewere, add_wishlist);
+router.post("/send-verify-register", sendRgisterVerify, veryifyRegister);
 export { router };

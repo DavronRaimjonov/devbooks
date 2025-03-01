@@ -14,5 +14,9 @@ const loginValidatorSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(3).max(10).required(),
 });
+const veryifyRegisterSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().max(6).required(),
+});
 
-export { userValidatorSchema, loginValidatorSchema };
+export { userValidatorSchema, loginValidatorSchema, veryifyRegisterSchema };
